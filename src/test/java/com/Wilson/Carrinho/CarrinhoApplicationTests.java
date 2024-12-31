@@ -8,6 +8,7 @@ class CarrinhoApplicationTests {
 
 	@Test
 	void contextLoads() {
+
 	}
 
 }
