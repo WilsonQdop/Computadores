@@ -2,9 +2,6 @@ package com.Wilson.Carrinho.entity;
 
 
 import jakarta.persistence.*;
-import lombok.Getter;
-import lombok.Setter;
-
 
 @Entity
 public class Shopping {
@@ -15,6 +12,16 @@ public class Shopping {
 
     private String name;
     private Double price;
+    @Column(length = 1000)
+    private String link;
+
+    public String getLink() {
+        return link;
+    }
+
+    public void setLink(String link) {
+        this.link = link;
+    }
 
     public Long getId_shopping() {
         return id_shopping;
