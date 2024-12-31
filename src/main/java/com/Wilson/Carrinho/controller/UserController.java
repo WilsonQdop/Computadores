@@ -33,7 +33,12 @@ public class UserController {
 
     @GetMapping
     public ResponseEntity<List<User>> findAllUsers() {
-        List<User> findAll = this.userService.findAll();
-        return ResponseEntity.ok().body(findAll);
+        try {
+            List<User> findAll = this.userService.findAll();
+            return ResponseEntity.ok().body(findAll);
+        } catch (Exception e) {
+            return new ResponseEntity<>(null, HttpStatus.BAD_REQUEST);
+        }
+
     }
 }
