@@ -1,7 +1,6 @@
 package com.Wilson.Carrinho.entity;
 
 import com.Wilson.Carrinho.dtos.UserDTO;
-import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonManagedReference;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
@@ -30,6 +29,13 @@ public class User {
     private List<Computer> computerList = new ArrayList<Computer>();
 
     public User() {}
+
+    public User(Long userId, String name, String password, String email) {
+        this.userId = userId;
+        this.name = name;
+        this.password = password;
+        this.email = email;
+    }
 
     public User(UserDTO userDTO) {
         this.name = userDTO.name();
