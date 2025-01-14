@@ -3,6 +3,7 @@ package com.Wilson.Carrinho.controller;
 import com.Wilson.Carrinho.dtos.UserDTO;
 import com.Wilson.Carrinho.entity.User;
 import com.Wilson.Carrinho.services.UserService;
+import jakarta.validation.Valid;
 import org.apache.coyote.Response;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -20,7 +21,7 @@ public class UserController {
     private UserService userService;
 
     @PostMapping
-    public ResponseEntity<User> createUser(@RequestBody UserDTO userDTO) {
+    public ResponseEntity<User> createUser(@Valid @RequestBody UserDTO userDTO) throws Exception {
        User newUser = this.userService.createUser(userDTO);
         return new ResponseEntity<> (newUser, HttpStatus.CREATED);
     }

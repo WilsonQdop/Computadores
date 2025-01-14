@@ -8,7 +8,7 @@ import java.util.List;
 public interface UserInterface {
     public User findById(Long id) throws Exception;
 
-    public User createUser(UserDTO userDTO);
+    public User createUser(UserDTO userDTO) throws Exception;
 
     public List<User> findAll();
 

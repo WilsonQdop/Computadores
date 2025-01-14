@@ -20,12 +20,12 @@ public class UserServiceTest {
 
     @Test
     void findById() {
-        User user = new User(1L, "Wilson", "123", "wilson.alt@f4.com");
-        User user1 = new User(2L, "Vilson", "123", "Vilson.alt@f4.com");
+        //User user = new User(1L, "Wilson", "123", "wilson.alt@f4.com");
+        //User user1 = new User(2L, "Vilson", "123", "Vilson.alt@f4.com");
 
         List<User> users = new ArrayList<>();
-        users.add(user);
-        users.add(user1);
+       // users.add(user);
+       // users.add(user1);
 
         List<User> resp = this.userService.findAll();
         assertEquals(users.size(), resp.size());

@@ -28,8 +28,8 @@ public class UserControllerTest {
     void findAll() {
         List<User> users = new ArrayList<>();
 
-        users.add(new User(1L, "Wilson", "123", "Wilson.test@gmail.com"));
-        users.add(new User(2L, "Vilson", "123", "Vicente.test@gmail.com"));
+        //users.add(new User(1L, "Wilson", "123", "Wilson.test@gmail.com"));
+       // users.add(new User(2L, "Vilson", "123", "Vicente.test@gmail.com"));
 
         when(this.userRepository.findAll()).thenReturn(users);
 

@@ -1,4 +1,15 @@
 package com.Wilson.Carrinho.dtos;
 
-public record UserDTO(String name, String email, String password) {
+import jakarta.validation.constraints.NotBlank;
+
+public record UserDTO(
+        @NotBlank(message = "Nome está vazio")
+        String name,
+
+        @NotBlank(message = "Email está vazio")
+        String email,
+
+        @NotBlank(message = "Senha está vazio")
+        String password
+) {
 }

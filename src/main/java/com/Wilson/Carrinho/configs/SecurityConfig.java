@@ -23,11 +23,12 @@ import java.util.Arrays;
 public class SecurityConfig {
 
     private static final String[] PUBLIC_MATCHERS = {
-            "/"
+            "/",
+            "/users"
     };
 
     private static final String[] PUBLIC_MATCHERS_POST = {
-            "/user",
+            "/users",
             "/computer",
             "/login",
             "/cadastro"
