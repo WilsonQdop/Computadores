@@ -1,4 +1,4 @@
 package com.github.Wilsonqdop.Gerenciamento.de.pecas.services;
 
-public class SetuoService {
+public class SetupService {
 }
