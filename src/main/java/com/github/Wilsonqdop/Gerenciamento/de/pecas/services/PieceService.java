@@ -3,11 +3,13 @@ package com.github.Wilsonqdop.Gerenciamento.de.pecas.services;
 import com.github.Wilsonqdop.Gerenciamento.de.pecas.dtos.piecesdtos.PieceRequestDTO;
 import com.github.Wilsonqdop.Gerenciamento.de.pecas.dtos.piecesdtos.PieceResponseDTO;
 import com.github.Wilsonqdop.Gerenciamento.de.pecas.models.Piece;
+import com.github.Wilsonqdop.Gerenciamento.de.pecas.models.Setup;
 import com.github.Wilsonqdop.Gerenciamento.de.pecas.models.Tag;
 import com.github.Wilsonqdop.Gerenciamento.de.pecas.repositories.PieceRepository;
 import com.github.Wilsonqdop.Gerenciamento.de.pecas.repositories.TagRepository;
 import org.springframework.stereotype.Service;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -16,10 +18,12 @@ import java.util.stream.Collectors;
 public class PieceService {
     private final PieceRepository pieceRepository;
     private final TagRepository tagRepository;
+    private final SetupService setupService;
 
-    public PieceService (PieceRepository pieceRepository, TagRepository tagRepository) {
+    public PieceService (PieceRepository pieceRepository, TagRepository tagRepository, SetupService setupService) {
         this.pieceRepository = pieceRepository;
         this.tagRepository = tagRepository;
+        this.setupService = setupService;
     }
 
     public Piece findById(Long id) {
@@ -27,30 +31,38 @@ public class PieceService {
                 " não encontrada"));
     }
 
-    public PieceResponseDTO createPiece (PieceRequestDTO dto) {
-        Piece newPiece = new Piece();
-        newPiece.setName(dto.name());
-        newPiece.setCategory(dto.category());
-        newPiece.setDescription(dto.description());
-        newPiece.setPrice(dto.price());
-        newPiece.setNameStore(dto.nameStore());
-        newPiece.setUrl(dto.url());
+    public List<PieceResponseDTO> createPieceForSetup (List<PieceRequestDTO> piecesDto, Long setupId) {
+        Setup setup = this.setupService.findById(setupId);
 
-        List<Tag> tags = dto.tags().stream()
-                .map(tagName -> tagRepository.findByName(tagName)
-                        .orElseGet(() -> tagRepository.save(new Tag(tagName))))
-                .toList();
+        List<Piece> pieces = new ArrayList<>();
 
-        newPiece.setTags(tags);
+        for(PieceRequestDTO dto : piecesDto ) {
+            Piece newPiece = new Piece();
+            newPiece.setName(dto.name());
+            newPiece.setCategory(dto.category());
+            newPiece.setDescription(dto.description());
+            newPiece.setPrice(dto.price());
+            newPiece.setNameStore(dto.nameStore());
+            newPiece.setUrl(dto.url());
+            newPiece.setSetup(setup);
 
-        Piece savedPiece = this.pieceRepository.save(newPiece);
+            List<Tag> tags = dto.tags().stream()
+                    .map(tagName -> tagRepository.findByName(tagName)
+                            .orElseGet(() -> tagRepository.save(new Tag(tagName))))
+                    .collect(Collectors.toList());
 
-        return new PieceResponseDTO(savedPiece.getName(), savedPiece.getCategory(), savedPiece.getDescription()
-        , savedPiece.getPrice(), savedPiece.getNameStore(), savedPiece.getUrl(), savedPiece.getDateTime()
-                ,savedPiece.getTags()
-                .stream()
-                .map(Tag::getName)
-                .toList());
+            newPiece.setTags(tags);
+
+            pieces.add(newPiece);
+
+        }
+        this.pieceRepository.saveAll(pieces);
+
+        return pieces.stream().map(p -> new PieceResponseDTO(
+                p.getName(), p.getCategory(), p.getDescription(),
+                p.getPrice(), p.getNameStore(), p.getUrl(),
+                p.getDateTime(), p.getTags().stream().map(Tag::getName).toList()
+        )).collect(Collectors.toList());
     }
 
     public PieceResponseDTO updatePiece(PieceRequestDTO dto, Long id) {
