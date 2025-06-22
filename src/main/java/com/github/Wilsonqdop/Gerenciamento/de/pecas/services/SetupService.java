@@ -4,15 +4,23 @@ import com.github.Wilsonqdop.Gerenciamento.de.pecas.dtos.piecesdtos.PieceRespons
 import com.github.Wilsonqdop.Gerenciamento.de.pecas.dtos.setupdto.RequestSetupDTO;
 import com.github.Wilsonqdop.Gerenciamento.de.pecas.dtos.setupdto.ResponseSetupDTO;
 import com.github.Wilsonqdop.Gerenciamento.de.pecas.models.Setup;
+import com.github.Wilsonqdop.Gerenciamento.de.pecas.models.User;
 import com.github.Wilsonqdop.Gerenciamento.de.pecas.repositories.SetupRepository;
+import com.github.Wilsonqdop.Gerenciamento.de.pecas.repositories.UserRepository;
+import org.springframework.security.oauth2.server.resource.authentication.JwtAuthenticationToken;
 import org.springframework.stereotype.Service;
+
+import java.util.Optional;
+import java.util.UUID;
 
 @Service
 public class SetupService {
     private final SetupRepository setupRepository;
+    private final UserRepository userRepository;
 
-    public SetupService (SetupRepository setupRepository) {
+    public SetupService (SetupRepository setupRepository, UserRepository userRepository) {
         this.setupRepository = setupRepository;
+        this.userRepository = userRepository;
     }
 
     public Setup findById(Long id) {
@@ -24,9 +32,11 @@ public class SetupService {
                 new RuntimeException("Setup não encontrado") );
     }
 
-    public ResponseSetupDTO createSetup (RequestSetupDTO dto) {
-        Setup setup = new Setup();
+    public ResponseSetupDTO createSetup (RequestSetupDTO dto, JwtAuthenticationToken token) {
+        Optional<User> user = this.userRepository.findById(UUID.fromString(token.getName()));
 
+        Setup setup = new Setup();
+        setup.setUser(user.get());
         setup.setName(dto.name());
 
         this.setupRepository.save(setup);

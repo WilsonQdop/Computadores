@@ -6,6 +6,7 @@ import com.github.Wilsonqdop.Gerenciamento.de.pecas.models.Setup;
 import com.github.Wilsonqdop.Gerenciamento.de.pecas.services.SetupService;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.oauth2.server.resource.authentication.JwtAuthenticationToken;
 import org.springframework.web.bind.annotation.*;
 
 @RestController
@@ -18,8 +19,8 @@ public class SetupController {
     }
 
     @PostMapping
-    public ResponseEntity<ResponseSetupDTO> createSetup (@RequestBody RequestSetupDTO dto) {
-        ResponseSetupDTO setup = this.setupService.createSetup(dto);
+    public ResponseEntity<ResponseSetupDTO> createSetup (@RequestBody RequestSetupDTO dto, JwtAuthenticationToken token) {
+        ResponseSetupDTO setup = this.setupService.createSetup(dto, token);
 
         return ResponseEntity.status(HttpStatus.CREATED).body(setup);
     }
